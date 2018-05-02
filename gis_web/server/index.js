@@ -7,7 +7,7 @@ const config = require('../nuxt.config.js')
 config.dev = !(process.env === 'production')
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
-const MIDDLEWARES = []
+const MIDDLEWARES = ['socket']
 // __dirname 当前路径
 const r = path => resolve(__dirname, path)
 
@@ -17,12 +17,15 @@ class Server {
     this.useMiddleWares(this.app)(MIDDLEWARES)
   }
   useMiddleWares(app) {
-    // R.map 数组的每个成员依次执行某个函数
-    return R.map(R.pipe(
-      i => `${r('./middlewares')}/${i}`, // 拿到模块的绝对路径
-      require, // 引入模块
-      R.map(i => i(app))  // 将app赋给每个中间件
-    ))
+  // 中间件的个数不定，通过 Ramda 的特性，从右往左进行函数组合，右侧函数的返回结果总是左侧函数的输入参数
+  // R.map(console.log)([1, 2, 3])
+  // MIDDLEWARE 数组交给了 R.map
+  // 分别拿到的单个数组中的值，我们可以通过 R.compose 再次进行组合。
+    return R.map(R.compose(
+      R.map(i => i(app)),
+      require,
+      i => `${r('./middlewares')}/${i}`)
+    )
   }
 
   async start() {

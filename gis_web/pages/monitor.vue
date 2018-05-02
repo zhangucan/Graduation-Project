@@ -24,6 +24,7 @@
 </template>
 <script>
 import testLine from '../components/charts/line'
+import io from 'socket.io-client'
 const testLayout = [
   { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': '0' },
   { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': '1' },
@@ -55,6 +56,13 @@ export default {
     return {
       layout: testLayout
     }
+  },
+  beforeCreate() {
+    const socket = io('http://127.0.0.1:1337')
+    socket.on('news', data => {
+      console.log(data)
+      socket.emit('my other event', { my: 'data' })
+    })
   }
 }
 </script>
@@ -63,7 +71,7 @@ export default {
     border-radius: 0px;
     border-style: solid;
     border-width: 12px 12px 12px;
-    border-image-source: url(https://datav.oss-cn-hangzhou.aliyuncs.com/uploads/images/af64beee06b258befb90addea6c5e889.png);
+    border-image-source: url(../assets/img/border.png);
     border-image-slice: 20 20 20 fill;
     border-image-width: initial;
     border-image-outset: initial;

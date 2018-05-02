@@ -23,6 +23,7 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sass-loader": "^6.0.7",
+    "socket.io": "^2.1.0",
     "source-map-support": "^0.4.15",
     "vue-echarts": "^3.0.7",
     "vue-grid-layout": "^2.1.12",
