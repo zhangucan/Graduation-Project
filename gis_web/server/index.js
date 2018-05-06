@@ -7,7 +7,7 @@ const config = require('../nuxt.config.js')
 config.dev = !(process.env === 'production')
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
-const MIDDLEWARES = ['socket']
+const MIDDLEWARES = ['database', 'router']
 // __dirname 当前路径
 const r = path => resolve(__dirname, path)
 

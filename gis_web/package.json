@@ -16,7 +16,7 @@
     "cross-env": "^5.0.1",
     "koa": "^2.4.1",
     "koa-router": "^7.2.1",
-    "mongoose": "^5.0.9",
+    "mongoose": "^5.0.17",
     "node-sass": "^4.7.2",
     "nuxt": "latest",
     "pug": "^2.0.1",
