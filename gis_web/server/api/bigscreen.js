@@ -58,6 +58,7 @@ export async function saveGridItem(data, gridLayoutId) {
     gridItem.w = data.w
     gridItem.h = data.h
     gridItem.title = data.title
+    gridItem.gridType = data.gridType
     gridItem.gridLayoutId = gridLayoutId
     gridItem.component = data.component
   } else {
@@ -68,6 +69,7 @@ export async function saveGridItem(data, gridLayoutId) {
       w: data.w,
       h: data.h,
       title: data.title,
+      gridType: data.gridType,
       component: data.component,
       gridLayoutId: gridLayoutId
     })

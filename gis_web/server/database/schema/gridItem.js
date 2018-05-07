@@ -28,6 +28,10 @@ const GridItemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  gridType: {
+    type: String,
+    required: true
+  },
   gridLayoutId: {
     type: mongoose.Schema.ObjectId,
     ref: 'GridLayout'
