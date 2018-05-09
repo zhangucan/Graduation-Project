@@ -4,6 +4,18 @@ const MapSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  rasterLayers: []
+  rasterLayers: [],
+  lon: {
+    type: String,
+    required: true
+  },
+  lat: {
+    type: String,
+    required: true
+  },
+  desc: {
+    type: String,
+    required: true
+  }
 })
 mongoose.model('Map', MapSchema)

@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 const GeoJSON = require('mongoose-geojson-schema')
 console.log(GeoJSON)
 const VectorFeaturesSchema = new mongoose.Schema({
-  title: String,
-  gridLayoutId: {
+  type: String,
+  mapId: {
     type: mongoose.Schema.ObjectId,
-    ref: 'GridLayout'
+    ref: 'Map'
   },
   point: mongoose.Schema.Types.Point,
   multipoint: mongoose.Schema.Types.MultiPoint,

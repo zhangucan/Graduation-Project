@@ -1,5 +1,4 @@
 import * as map from '../api/map.js'
-import fs from 'fs'
 // import Msg from '../utils/Msg'
 export async function fetchMap(ctx, next) {
   const { title } = ctx.query
@@ -21,15 +20,21 @@ export async function fetchMap(ctx, next) {
 }
 
 export async function saveMap(ctx, next) {
-  map.saveMap(ctx.query)
+  console.log(ctx.request.body)
+  const mapId = await map.saveMap(ctx.request.body)
+  const obj = {
+    code: 20000,
+    mapId: mapId
+  }
+  ctx.body = obj
 }
 
 export async function saveVectorFeatures(ctx, next) {
-  fs.readFile('./static/test.geojson', 'utf8', function(err, data) {
-    if (err) console.log(err)
-    map.saveVectorFeatures(data)
-  })
-  ctx.body = 'hi'
+  await map.saveVectorFeatures(ctx.request.body)
+  const obj = {
+    code: 20000
+  }
+  ctx.body = obj
 }
 
 export async function fetchVectorFeatures(ctx, next) {

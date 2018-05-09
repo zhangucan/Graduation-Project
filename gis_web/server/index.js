@@ -1,8 +1,5 @@
 import Koa from 'koa'
-import convert from 'koa-convert'
-import json from 'koa-json'
-import Bodyparser from 'koa-bodyparser'
-import logger from 'koa-logger'
+
 import { Nuxt, Builder } from 'nuxt'
 import R from 'ramda'
 import { resolve } from 'path'
@@ -18,7 +15,6 @@ const r = path => resolve(__dirname, path)
 class Server {
   constructor() {
     this.app = new Koa()
-    this.bodyparser = Bodyparser()
     this.useMiddleWares(this.app)(MIDDLEWARES)
   }
   useMiddleWares(app) {
@@ -42,9 +38,6 @@ class Server {
       const builder = new Builder(nuxt)
       await builder.build()
     }
-    this.app.use(convert(this.bodyparser))
-    this.app.use(convert(json()))
-    this.app.use(convert(logger()))
     this.app.use(async (ctx, next) => {
       await next()
       ctx.status = 200 // koa defaults to 404 when it sees that status is unset

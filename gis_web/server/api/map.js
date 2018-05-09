@@ -2,17 +2,11 @@ import mongoose from 'mongoose'
 const VectorFeatures = mongoose.model('VectorFeatures')
 const Map = mongoose.model('Map')
 export async function saveVectorFeatures(data) {
-  const a = JSON.parse(data)
-  var type = a.type.toLowerCase()
-  var obj = {
-    title: 'A test object'
-  }
-  obj[type] = a
-  console.log(obj)
-  const vectorFeatures = new VectorFeatures(obj)
+  var type = data.vectorFeatures.type.toLowerCase()
+  data[type] = data.vectorFeatures
+  const vectorFeatures = new VectorFeatures(data)
   return new Promise((resolve, reject) => {
     vectorFeatures.save((err, obj) => {
-      console.log(obj)
       if (err) return reject(err)
       return resolve(obj)
     })
@@ -55,6 +49,9 @@ export async function saveMap(data) {
   } else {
     map = new Map({
       title: data.title,
+      lon: data.lon,
+      lat: data.lat,
+      desc: data.desc,
       rasterLayers: data.rasterLayers
     })
   }
