@@ -3,10 +3,12 @@ const GeoJSON = require('mongoose-geojson-schema')
 console.log(GeoJSON)
 const VectorFeaturesSchema = new mongoose.Schema({
   type: String,
+  featureType: String,
   mapId: {
     type: mongoose.Schema.ObjectId,
     ref: 'Map'
   },
+  displayTime: String,
   point: mongoose.Schema.Types.Point,
   multipoint: mongoose.Schema.Types.MultiPoint,
   linestring: mongoose.Schema.Types.LineString,

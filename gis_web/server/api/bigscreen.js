@@ -2,16 +2,31 @@ import mongoose from 'mongoose'
 const GridItem = mongoose.model('GridItem')
 const GridLayout = mongoose.model('GridLayout')
 
-export async function fetchGridLayout(query) {
+export async function fetchGridLayoutList(query) {
   return new Promise((resolve, reject) => {
     GridLayout.find(query, (error, data) => {
       if (error) return reject(error)
       if (data) {
         return resolve(data)
       } else {
-        return reject()
+        return reject(error)
       }
     })
+  })
+}
+export async function fetchGridLayout(query) {
+  const layout = await GridLayout.findOne(query)
+  let gridItems = []
+  if (layout) {
+    gridItems = await fetchGridItems({ gridLayoutId: layout._id })
+  }
+  layout.gridItems = gridItems
+  return new Promise((resolve, reject) => {
+    if (layout) {
+      resolve(layout)
+    } else {
+      reject()
+    }
   })
 }
 export async function saveGridLayout(data) {
@@ -34,9 +49,22 @@ export async function saveGridLayout(data) {
     })
   })
 }
-export async function fetchGridItem(query) {
+export async function fetchGridItems(query) {
   return new Promise((resolve, reject) => {
     GridItem.find(query, (error, data) => {
+      if (error) return reject(error)
+      if (data) {
+        return resolve(data)
+      } else {
+        return reject()
+      }
+    })
+  })
+}
+
+export async function fetchGridItem(query) {
+  return new Promise((resolve, reject) => {
+    GridItem.findOne(query, (error, data) => {
       if (error) return reject(error)
       if (data) {
         return resolve(data)

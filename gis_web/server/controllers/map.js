@@ -1,16 +1,20 @@
 import * as map from '../api/map.js'
 // import Msg from '../utils/Msg'
 export async function fetchMap(ctx, next) {
+  const query = ctx.query
+  const data = await map.fetchMap(query)
+  const obj = {
+    code: 20000,
+    map: data,
+    vectorFeatures: data.vectorFeatures
+  }
+  console.log(obj.map.vectorFeatures)
+  ctx.body = obj
+}
+export async function fetchMapList(ctx, next) {
   const { title } = ctx.query
   if (!title) {
-    const mapLsit = await map.fetchMap()
-    const obj = {
-      code: 20000,
-      mapLsit: [...mapLsit]
-    }
-    ctx.body = obj
-  } else {
-    const mapLsit = await map.fetchMap({ title: title })
+    const mapLsit = await map.fetchMapList()
     const obj = {
       code: 20000,
       mapLsit: [...mapLsit]
@@ -36,7 +40,11 @@ export async function saveVectorFeatures(ctx, next) {
   }
   ctx.body = obj
 }
-
-export async function fetchVectorFeatures(ctx, next) {
-  // const { title, rasterLayers } = ctx.query
+export async function fetchVectors(ctx, next) {
+  const vectors = await map.fetchVectorFeatures(ctx.query)
+  const obj = {
+    code: 20000,
+    vectors: vectors
+  }
+  ctx.body = obj
 }

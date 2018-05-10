@@ -3,16 +3,19 @@ import convert from 'koa-convert'
 import json from 'koa-json'
 import bodyparser from 'koa-bodyparser'
 import logger from 'koa-logger'
-import { fetchGridLayout } from '../controllers/bigscreen'
-import { saveMap, fetchMap } from '../controllers/map'
-import { saveVectorFeatures } from '../controllers/map'
+import { fetchGridLayout, fetchGridLayoutList, fetchGridItem } from '../controllers/bigscreen'
+import { saveMap, fetchMap, fetchMapList, saveVectorFeatures, fetchVectors } from '../controllers/map'
 
 export const router = app => {
   const router = new Router()
-  router.get('/bigscreen', fetchGridLayout)
+  router.get('/griditem', fetchGridItem)
+  router.get('/gridlayout', fetchGridLayout)
+  router.get('/gridlayoutlist', fetchGridLayoutList)
   router.post('/map/savemap', saveMap)
   router.post('/map/savevectorfeature', saveVectorFeatures)
-  router.get('/maps', fetchMap)
+  router.get('/map', fetchMap)
+  router.get('/maps', fetchMapList)
+  router.get('/vector', fetchVectors)
   router.post('/vectorfeatures', saveVectorFeatures)
   router.post('/user/login', function(ctx, next) {
     ctx.body = {

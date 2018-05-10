@@ -12,21 +12,30 @@ import * as bigscreen from '../api/bigscreen.js'
 // ]
 
 export async function fetchGridLayout(ctx, next) {
-  // var obj = {
-  //   title: '白龟山湿地公园'
-  // }
-  // var a = await bigscreen.saveGridLayout(obj)
-  // testLayout.forEach(async item => {
-  //   console.log(item)
-  //   await bigscreen.saveGridItem(item, a)
-  // })
-  const { title } = ctx.query
-  const gridLayout = await bigscreen.fetchGridLayout({ title: title })
-  const gridItems = await bigscreen.fetchGridItem({ gridLayoutId: gridLayout[0]._id })
+  const query = ctx.query
+  const gridLayout = await bigscreen.fetchGridLayout(query)
+  const gridItems = await bigscreen.fetchGridItems({ gridLayoutId: gridLayout._id })
   const obj = {
     code: 20000,
-    title: gridLayout[0].title,
     gridItems: [...gridItems]
   }
   ctx.body = obj
 }
+export async function fetchGridLayoutList(ctx, next) {
+  const fetchGridLayoutList = await bigscreen.fetchGridLayoutList()
+  const obj = {
+    code: 20000,
+    gridItems: [...fetchGridLayoutList]
+  }
+  ctx.body = obj
+}
+
+export async function fetchGridItem(ctx, next) {
+  const fetchGridItem = await bigscreen.fetchGridItem(ctx.query)
+  const obj = {
+    code: 20000,
+    gridItem: fetchGridItem
+  }
+  ctx.body = obj
+}
+
