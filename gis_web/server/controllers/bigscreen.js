@@ -39,3 +39,10 @@ export async function fetchGridItem(ctx, next) {
   ctx.body = obj
 }
 
+export async function saveGridItem(ctx, next) {
+  await bigscreen.saveGridItem(ctx.request.body)
+  const obj = {
+    code: 20000
+  }
+  ctx.body = obj
+}
