@@ -24,7 +24,6 @@ export async function fetchMapList(ctx, next) {
 }
 
 export async function saveMap(ctx, next) {
-  console.log(ctx.request.body)
   const mapId = await map.saveMap(ctx.request.body)
   const obj = {
     code: 20000,

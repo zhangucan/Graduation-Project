@@ -76,8 +76,8 @@ export async function fetchGridItem(query) {
 }
 export async function saveGridItem(data, gridLayoutId) {
   let gridItem = null
-  if (data.id) {
-    gridItem = await fetchGridItem({ _id: data.id })
+  if (data._id) {
+    gridItem = await fetchGridItem({ _id: data._id })
   }
   if (gridItem) {
     gridItem.i = data.i
@@ -89,7 +89,7 @@ export async function saveGridItem(data, gridLayoutId) {
     gridItem.gridType = data.gridType
     gridItem.rasterList = data.rasterList
     gridItem.vectorList = data.vectorList
-    gridItem.gridLayoutId = gridLayoutId
+    gridItem.gridLayoutId = data.gridLayoutId
     gridItem.component = data.component
   } else {
     gridItem = new GridItem({
@@ -103,7 +103,7 @@ export async function saveGridItem(data, gridLayoutId) {
       rasterList: data.rasterList,
       vectorList: data.vectorList,
       component: data.component,
-      gridLayoutId: gridLayoutId
+      gridLayoutId: data.gridLayoutId
     })
   }
   console.log(gridLayoutId)
