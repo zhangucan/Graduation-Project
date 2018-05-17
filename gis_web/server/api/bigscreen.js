@@ -31,8 +31,8 @@ export async function fetchGridLayout(query) {
 }
 export async function saveGridLayout(data) {
   let gridLayout = null
-  if (data.id) {
-    gridLayout = await fetchGridLayout({ _id: data.id })
+  if (data._id) {
+    gridLayout = await fetchGridLayout({ _id: data._id })
   }
   if (gridLayout) {
     gridLayout.title = data.title
@@ -43,7 +43,6 @@ export async function saveGridLayout(data) {
   }
   return new Promise((resolve, reject) => {
     gridLayout.save((err, obj) => {
-      console.log(obj)
       if (err) return reject(err)
       return resolve(obj._id)
     })
@@ -74,7 +73,7 @@ export async function fetchGridItem(query) {
     })
   })
 }
-export async function saveGridItem(data, gridLayoutId) {
+export async function saveGridItem(data) {
   let gridItem = null
   if (data._id) {
     gridItem = await fetchGridItem({ _id: data._id })
@@ -87,8 +86,6 @@ export async function saveGridItem(data, gridLayoutId) {
     gridItem.h = data.h
     gridItem.title = data.title
     gridItem.gridType = data.gridType
-    gridItem.rasterList = data.rasterList
-    gridItem.vectorList = data.vectorList
     gridItem.gridLayoutId = data.gridLayoutId
     gridItem.component = data.component
   } else {
@@ -100,16 +97,12 @@ export async function saveGridItem(data, gridLayoutId) {
       h: data.h,
       title: data.title,
       gridType: data.gridType,
-      rasterList: data.rasterList,
-      vectorList: data.vectorList,
       component: data.component,
       gridLayoutId: data.gridLayoutId
     })
   }
-  console.log(gridLayoutId)
   return new Promise((resolve, reject) => {
     gridItem.save((err, obj) => {
-      console.log(gridItem)
       if (err) return reject(err)
       return resolve(obj._id)
     })

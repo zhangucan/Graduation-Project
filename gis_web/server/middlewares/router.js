@@ -3,7 +3,7 @@ import convert from 'koa-convert'
 import json from 'koa-json'
 import bodyparser from 'koa-bodyparser'
 import logger from 'koa-logger'
-import { fetchGridLayout, fetchGridLayoutList, fetchGridItem, saveGridItem } from '../controllers/bigscreen'
+import { fetchGridLayout, fetchGridLayoutList, fetchGridItem, saveGridItem, saveGridLayout } from '../controllers/bigscreen'
 import { saveMap, fetchMap, fetchMapList, saveVectorFeatures, fetchVectors } from '../controllers/map'
 
 export const router = app => {
@@ -11,6 +11,7 @@ export const router = app => {
   router.get('/griditem', fetchGridItem)
   router.post('/griditem', saveGridItem)
   router.get('/gridlayout', fetchGridLayout)
+  router.post('/gridlayout', saveGridLayout)
   router.get('/gridlayoutlist', fetchGridLayoutList)
   router.post('/map/savemap', saveMap)
   router.post('/map/savevectorfeature', saveVectorFeatures)

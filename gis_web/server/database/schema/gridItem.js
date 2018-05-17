@@ -24,12 +24,7 @@ const GridItemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  rasterList: [],
-  vectorList: [],
-  component: {
-    type: String,
-    required: true
-  },
+  component: mongoose.Schema.Types.Mixed,
   gridType: {
     type: String,
     required: true
