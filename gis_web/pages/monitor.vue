@@ -17,18 +17,17 @@
       :h='item.h'
       :i='item.i'
       :key='index'>
-        <component :is="showView(item.gridType)" :component="item.component"></component>
+        <!-- <component :is="showView(item.gridType)" :component="item.component"></component> -->
     </grid-item>
 </grid-layout>
 </template>
 <script>
 import screenMap from '../components/Map'
-import screenChart from '../components/Chart'
+// import screenChart from '../components/Chart'
 export default {
   layout: 'bigScreen',
   components: {
-    screenMap,
-    screenChart
+    screenMap
   },
   data() {
     return {

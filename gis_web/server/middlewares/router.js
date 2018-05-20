@@ -38,7 +38,11 @@ export const router = app => {
       }
     }
   })
-  router.get('/user/logout', fetchGridLayout)
+  router.post('/user/logout', (ctx, next) => {
+    ctx.body = {
+      code: 20000
+    }
+  })
   app.use(convert(bodyparser()))
   app.use(convert(json()))
   app.use(convert(logger()))

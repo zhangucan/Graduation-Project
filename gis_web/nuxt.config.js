@@ -26,7 +26,8 @@ module.exports = {
    */
   plugins: [
     { src: '~plugins/gridLayout.js', ssr: false },
-    { src: '~plugins/vueCharts.js', ssr: false }
+    { src: '~plugins/vueCharts.js', ssr: false },
+    { src: '~plugins/mapboxGL.js', ssr: false }
   ],
   build: {
     /*
