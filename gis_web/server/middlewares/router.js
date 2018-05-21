@@ -28,8 +28,8 @@ export const router = app => {
       }
     }
   })
-  router.get('/test', saveVectorFeatures)
   router.get('/user/info', function(ctx, next) {
+    console.log(ctx)
     ctx.body = {
       code: 20000,
       data: {
