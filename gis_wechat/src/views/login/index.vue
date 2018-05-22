@@ -65,6 +65,14 @@ export default {
       pwdType: 'password'
     }
   },
+  sockets: {
+    connect: function() {
+      console.log('socket connected')
+    },
+    customEmit: function(val) {
+      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+    }
+  },
   methods: {
     showPwd() {
       if (this.pwdType === 'password') {
@@ -79,6 +87,7 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
+            this.$socket.emit('my other event', '连上了')
             this.$router.push({ path: '/' })
           }).catch(() => {
             this.loading = false

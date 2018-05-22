@@ -77,7 +77,7 @@ const chartList = [
 ]
 const bigscreen = {
   state: {
-    currentView: 'BigScreenCard',
+    currentView: 'ChooseScreen',
     gridItem: {},
     currentLayout: '',
     gridLayout: {},

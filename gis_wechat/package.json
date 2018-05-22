@@ -15,6 +15,7 @@
   "dependencies": {
     "@handsontable-pro/vue": "^2.0.0-beta1",
     "@handsontable/vue": "^2.0.0-beta1",
+    "@mapbox/mapbox-gl-language": "^0.9.2",
     "@supermap/iclient-mapboxgl": "^9.0.1",
     "axios": "0.17.1",
     "codemirror": "^5.37.0",
@@ -27,7 +28,7 @@
     "js-cookie": "2.2.0",
     "jsonlint": "^1.6.3",
     "lodash": "^4.17.10",
-    "mapbox-gl": "^0.45.0-beta.1",
+    "mapbox-gl": "^0.45.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "ramda": "0.24.1",
@@ -37,6 +38,7 @@
     "vue-grid-layout": "^2.1.13",
     "vue-handsontable-official": "^1.1.0",
     "vue-router": "3.0.1",
+    "vue-socket.io": "^2.1.1-b",
     "vuedraggable": "^2.16.0",
     "vuex": "3.0.1"
   },

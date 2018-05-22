@@ -1,3 +1,4 @@
+
 {
     "color": [
         "#3fb1e3",
@@ -7,14 +8,14 @@
         "#c4ebad",
         "#96dee8"
     ],
-    "backgroundColor": "rgba(252,252,252,1)",
+    "backgroundColor": "rgba(252,252,252,0)",
     "textStyle": {},
     "title": {
         "textStyle": {
-            "color": "#666666"
+            "color": "rgba(252,252,252,0)"
         },
         "subtextStyle": {
-            "color": "#999999"
+            "color": "rgba(252,252,252,0)"
         }
     },
     "line": {
@@ -242,7 +243,7 @@
         "axisLine": {
             "show": true,
             "lineStyle": {
-                "color": "#cccccc"
+                "color": "rgba(204,204,204,0.2)"
             }
         },
         "axisTick": {
@@ -254,14 +255,14 @@
         "axisLabel": {
             "show": true,
             "textStyle": {
-                "color": "#cccccc"
+                "color": "rgba(153,153,153,0.52)"
             }
         },
         "splitLine": {
             "show": true,
             "lineStyle": {
                 "color": [
-                    "#eeeeee"
+                    "rgba(238,238,238,0.21)"
                 ]
             }
         },
@@ -279,7 +280,7 @@
         "axisLine": {
             "show": true,
             "lineStyle": {
-                "color": "#cccccc"
+                "color": "rgba(204,204,204,0.2)"
             }
         },
         "axisTick": {
@@ -291,14 +292,14 @@
         "axisLabel": {
             "show": true,
             "textStyle": {
-                "color": "#cccccc"
+                "color": "rgba(153,153,153,0.52)"
             }
         },
         "splitLine": {
             "show": true,
             "lineStyle": {
                 "color": [
-                    "#eeeeee"
+                    "rgba(238,238,238,0.21)"
                 ]
             }
         },
@@ -316,7 +317,7 @@
         "axisLine": {
             "show": true,
             "lineStyle": {
-                "color": "#cccccc"
+                "color": "rgba(204,204,204,0.2)"
             }
         },
         "axisTick": {
@@ -328,14 +329,14 @@
         "axisLabel": {
             "show": true,
             "textStyle": {
-                "color": "#cccccc"
+                "color": "rgba(153,153,153,0.52)"
             }
         },
         "splitLine": {
             "show": true,
             "lineStyle": {
                 "color": [
-                    "#eeeeee"
+                    "rgba(238,238,238,0.21)"
                 ]
             }
         },
@@ -353,7 +354,7 @@
         "axisLine": {
             "show": true,
             "lineStyle": {
-                "color": "#cccccc"
+                "color": "rgba(204,204,204,0.2)"
             }
         },
         "axisTick": {
@@ -365,14 +366,14 @@
         "axisLabel": {
             "show": true,
             "textStyle": {
-                "color": "#cccccc"
+                "color": "rgba(153,153,153,0.52)"
             }
         },
         "splitLine": {
             "show": true,
             "lineStyle": {
                 "color": [
-                    "#eeeeee"
+                    "rgba(238,238,238,0.21)"
                 ]
             }
         },
@@ -389,16 +390,16 @@
     "toolbox": {
         "iconStyle": {
             "normal": {
-                "borderColor": "#999999"
+                "borderColor": "rgba(153,153,153,0.5)"
             },
             "emphasis": {
-                "borderColor": "#666666"
+                "borderColor": "rgba(102,102,102,0.5)"
             }
         }
     },
     "legend": {
         "textStyle": {
-            "color": "#999999"
+            "color": "rgba(153,153,153,0.49)"
         }
     },
     "tooltip": {

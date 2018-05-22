@@ -2,15 +2,15 @@
   <div class="container">
     <div class="header"></div>
     <div class="content">
-      <grid-layout class="top-30 right10"
+      <grid-layout
         :layout='layout'
         :col-num='12'
-        :row-height='30'
+        :row-height='40'
         :is-draggable='false'
         :is-resizable='false'
         :is-mirrored='false'
         :vertical-compact='true'
-        :margin='[30,30,30,30]'
+        :margin='[10,10,10,10]'
         :use-css-transforms='true'
       >
         <grid-item class="grid-border" v-for='(item, index) in layout'
@@ -20,6 +20,7 @@
           :h='item.h'
           :i='item.i'
           :key='index'>
+          <component :height="componentHeight(item.h)" :is="showView(item.gridType)" :component="item.component"></component>
         </grid-item>
       </grid-layout>
     </div>
@@ -27,12 +28,28 @@
 </template>
 <script>
 import VueGridLayout from 'vue-grid-layout'
+import ScreenMap from '../ScreenMap'
+import ScreenChart from '../ScreenChart'
 const GridLayout = VueGridLayout.GridLayout
 const GridItem = VueGridLayout.GridItem
 export default {
   components: {
     GridLayout,
-    GridItem
+    GridItem,
+    ScreenMap,
+    ScreenChart
+  },
+  methods: {
+    showView(type) {
+      if (type === 'map') {
+        return 'screenMap'
+      } else {
+        return 'screenChart'
+      }
+    },
+    componentHeight(h) {
+      return h * 50 - 40
+    }
   },
   computed: {
     layout() {
@@ -74,5 +91,25 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+}
+.grid-border{
+  border-radius: 0px;
+  border-style: solid;
+  border-width: 12px 12px 12px;
+  border-image-source: url(../../../static/monitor/border.png);
+  border-image-slice: 20 20 20 fill;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: repeat;
+  background: none;
+}
+.top-30{
+  top: -30px;
+}
+.right10{
+  right: 10px;
+}
+.margin-bottom50{
+  margin-bottom: 50px;
 }
 </style>
