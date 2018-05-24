@@ -10,14 +10,14 @@ fs.readdirSync(models) // 拿到所有的schema
 
 export const database = app => { // 拿到传入的app
   mongoose.set('debug', true)
-  mongoose.connect(config.db)
+  mongoose.connect(config.mongodb)
   mongoose.connection.on('disconnected', () => {
-    mongoose.connect(config.db)
+    mongoose.connect(config.mongodb)
   })
   mongoose.connection.on('error', err => {
     console.error(err)
   })
   mongoose.connection.on('open', async => {
-    console.log('done ', config.db)
+    console.log('done ', config.mongodb)
   })
 }

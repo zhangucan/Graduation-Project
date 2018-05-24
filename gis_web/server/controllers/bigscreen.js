@@ -1,19 +1,34 @@
 import * as bigscreen from '../api/bigscreen.js'
-// const testLayout = {
-//   _id: '5aefe230b5ec0791697972e3',
-//   title: '白龟山湿地公园',
-//   gridItems: [
-//       { 'x': 0, 'y': 0, 'w': 2, 'h': 3, 'i': '0', title: 'test', gridType: 'chart', component: { id: 'test' }},
-//       { 'x': 2, 'y': 0, 'w': 8, 'h': 12, 'i': '1', title: 'test', gridType: 'map', component: { id: 'test' }},
-//       { 'x': 10, 'y': 0, 'w': 2, 'h': 3, 'i': '2', title: 'test', gridType: 'chart', component: { id: 'test' }},
-//       { 'x': 0, 'y': 2, 'w': 2, 'h': 3, 'i': '3', title: 'test', gridType: 'chart', component: { id: 'test' }},
-//       { 'x': 10, 'y': 2, 'w': 2, 'h': 3, 'i': '4', title: 'test', gridType: 'chart', component: { id: 'test' }},
-//       { 'x': 0, 'y': 4, 'w': 2, 'h': 3, 'i': '5', title: 'test', gridType: 'chart', component: { id: 'test' }},
-//       { 'x': 10, 'y': 4, 'w': 2, 'h': 3, 'i': '6', title: 'test', gridType: 'chart', component: { id: 'test' }},
-//       { 'x': 0, 'y': 6, 'w': 2, 'h': 3, 'i': '7', title: 'test', gridType: 'chart', component: { id: 'test' }},
-//       { 'x': 10, 'y': 6, 'w': 2, 'h': 3, 'i': '8', title: 'test', gridType: 'chart', component: { id: 'test' }}
-//   ]
-// }
+const testLayout = {
+  title: '未知湿地',
+  gridItems: [
+      { 'x': 0, 'y': 0, 'w': 2, 'h': 3, 'i': '0', title: 'test', gridType: 'chart', component: { id: 'test' }},
+      { 'x': 2, 'y': 0, 'w': 8, 'h': 12, 'i': '1', title: 'test', gridType: 'map', component: { id: 'test' }},
+      { 'x': 10, 'y': 0, 'w': 2, 'h': 3, 'i': '2', title: 'test', gridType: 'chart', component: { id: 'test' }},
+      { 'x': 0, 'y': 2, 'w': 2, 'h': 3, 'i': '3', title: 'test', gridType: 'chart', component: { id: 'test' }},
+      { 'x': 10, 'y': 2, 'w': 2, 'h': 3, 'i': '4', title: 'test', gridType: 'chart', component: { id: 'test' }},
+      { 'x': 0, 'y': 4, 'w': 2, 'h': 3, 'i': '5', title: 'test', gridType: 'chart', component: { id: 'test' }},
+      { 'x': 10, 'y': 4, 'w': 2, 'h': 3, 'i': '6', title: 'test', gridType: 'chart', component: { id: 'test' }},
+      { 'x': 0, 'y': 6, 'w': 2, 'h': 3, 'i': '7', title: 'test', gridType: 'chart', component: { id: 'test' }},
+      { 'x': 10, 'y': 6, 'w': 2, 'h': 3, 'i': '8', title: 'test', gridType: 'chart', component: { id: 'test' }}
+  ]
+}
+export async function createGridLayout(ctx, next) {
+  const data = testLayout
+  const gridLayoutId = await bigscreen.saveGridLayout(data)
+  data.gridItems.forEach(async item => {
+    item.gridLayoutId = gridLayoutId
+    await bigscreen.saveGridItem(item)
+  })
+  const gridLayout = await bigscreen.fetchGridLayout({ _id: gridLayoutId })
+  const gridItems = await bigscreen.fetchGridItems({ gridLayoutId: gridLayout._id })
+  const obj = {
+    code: 20000,
+    gridItems: [...gridItems],
+    gridLayout: gridLayout
+  }
+  ctx.body = obj
+}
 export async function fetchGridLayout(ctx, next) {
   const query = ctx.query
   const gridLayout = await bigscreen.fetchGridLayout(query)
@@ -26,6 +41,12 @@ export async function fetchGridLayout(ctx, next) {
   ctx.body = obj
 }
 export async function fetchGridLayoutList(ctx, next) {
+  if (ctx.session.view === undefined) {
+    ctx.session.view = 0
+  } else {
+    ctx.session.view += 1
+  }
+  console.log(`viewNum: ${ctx.session.view}`)
   const fetchGridLayoutList = await bigscreen.fetchGridLayoutList()
   const obj = {
     code: 20000,

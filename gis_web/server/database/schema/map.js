@@ -5,6 +5,7 @@ const MapSchema = new mongoose.Schema({
     required: true
   },
   rasterLayers: [],
+  vectorLayers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'VectorFeatures' }],
   lon: {
     type: String,
     required: true

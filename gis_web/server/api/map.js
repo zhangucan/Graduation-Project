@@ -41,8 +41,8 @@ export async function fetchMapList(query) {
     })
   })
 }
-export async function fetchMap(query) {
-  const map = await Map.findOne(query)
+export async function fetchMap(query, fields) {
+  const map = await Map.findOne(query, fields).exec()
   let vectorFeatures = []
   if (map) {
     vectorFeatures = await fetchVectorFeatures({ mapId: map._id })

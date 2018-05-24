@@ -48,9 +48,9 @@ export async function saveGridLayout(data) {
     })
   })
 }
-export async function fetchGridItems(query) {
+export async function fetchGridItems(query, fields) {
   return new Promise((resolve, reject) => {
-    GridItem.find(query, (error, data) => {
+    GridItem.find(query, fields, (error, data) => {
       if (error) return reject(error)
       if (data) {
         return resolve(data)

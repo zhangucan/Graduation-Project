@@ -14,6 +14,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "cross-env": "^5.0.1",
+    "ioredis": "^3.2.2",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
@@ -21,9 +22,11 @@
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.2.1",
+    "koa-session2": "^2.2.6",
     "mapbox-gl": "^0.45.0",
     "mongoose": "^5.0.17",
     "mongoose-geojson-schema": "^2.1.2",
+    "node-rsa": "^1.0.0",
     "node-sass": "^4.7.2",
     "nuxt": "latest",
     "pug": "^2.0.3",
@@ -32,6 +35,7 @@
     "sass-loader": "^6.0.7",
     "socket.io": "^2.1.0",
     "source-map-support": "^0.4.15",
+    "uid-safe": "^2.1.5",
     "vue-echarts": "^3.0.7",
     "vue-grid-layout": "^2.1.12",
     "xml2js": "^0.4.19"
