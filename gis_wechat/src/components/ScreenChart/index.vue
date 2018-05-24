@@ -1,25 +1,36 @@
 <template>
   <div class="custome-container">
-    <div ref="customeChart" class="chart"></div>
+    <div ref="customeChart" :style="mapSize"></div>
   </div>
 </template>
 <script>
 import { Chart } from '../charts/Chart'
 export default {
   props: {
-    component: Object
+    component: Object,
+    height: Number,
+    width: Number
   },
   data() {
     return {
       chart: null
     }
   },
+  computed: {
+    mapSize() {
+      console.log(document.body.clientWidth * this.width)
+      const styleObj = {
+        height: this.height + 'px',
+        width: document.body.clientWidth * this.width - 40 + 'px'
+      }
+      return styleObj
+    }
+  },
   methods: {
     init() {
       this.chart = new Chart(this.$refs.customeChart)
       if (this.component.option) {
-        this.chart.setChartOption()(this.component.chartType)
-        console.log(123)
+        this.chart.setOption(this.component.option)
       }
     }
   },
@@ -30,11 +41,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .custome-container{
-  height: 100%;
-  width: 100%;
+  height: inherit;
+  width: inherit;
 }
 .chart{
-  height: 100%;
   width: 100%;
 }
 </style>

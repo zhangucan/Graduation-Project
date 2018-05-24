@@ -84,7 +84,6 @@ export default {
         obj.camera.pitch = Math.floor(Math.random() * 50)
         obj.camera.zoom = 11.64
         _this.bigscreenList.push(obj)
-        console.log(item)
       })
     })
   }

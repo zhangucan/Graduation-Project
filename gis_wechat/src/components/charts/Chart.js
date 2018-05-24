@@ -13,6 +13,12 @@ export class Chart {
       i => require(`./${i.type}/${i.name}`)
     )
   }
+  setOption(option) {
+    this.chart.setOption(option)
+  }
+  resize() {
+    this.chart.resize()
+  }
   clear() {
     this.chart.clear()
   }

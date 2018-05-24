@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container" >
     <div class="header"></div>
-    <div class="content">
+    <div class="content" ref="screenContainer">
       <grid-layout
         :layout='layout'
         :col-num='12'
@@ -20,7 +20,7 @@
           :h='item.h'
           :i='item.i'
           :key='index'>
-          <component :height="componentHeight(item.h)" :is="showView(item.gridType)" :component="item.component"></component>
+          <component :width="componentWigth(item.w)" :height="componentHeight(item.h)" :is="showView(item.gridType)" :component="item.component"></component>
         </grid-item>
       </grid-layout>
     </div>
@@ -49,6 +49,9 @@ export default {
     },
     componentHeight(h) {
       return h * 50 - 40
+    },
+    componentWigth(w) {
+      return w / 12
     }
   },
   computed: {

@@ -35,6 +35,7 @@
     "script-loader": "^0.7.2",
     "v-contextmenu": "^2.5.1",
     "vue": "2.5.10",
+    "vue-echarts": "^3.0.7",
     "vue-grid-layout": "^2.1.13",
     "vue-handsontable-official": "^1.1.0",
     "vue-router": "3.0.1",
