@@ -25,3 +25,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getRSAkey() {
+  return request({
+    url: '/user/rsakey',
+    method: 'get'
+  })
+}

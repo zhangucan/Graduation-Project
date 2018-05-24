@@ -29,6 +29,7 @@
     "jsonlint": "^1.6.3",
     "lodash": "^4.17.10",
     "mapbox-gl": "^0.45.0",
+    "node-rsa": "^1.0.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "ramda": "0.24.1",
