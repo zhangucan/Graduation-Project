@@ -8,7 +8,6 @@ export async function fetchMap(ctx, next) {
     map: data,
     vectorFeatures: data.vectorFeatures
   }
-  console.log(obj.map.vectorFeatures)
   ctx.body = obj
 }
 export async function fetchMapList(ctx, next) {

@@ -8,7 +8,9 @@ const UserSchema = new mongoose.Schema({
   avatar: {
     type: String
   },
-  roles: [],
+  role: {
+    type: String
+  },
   gridLayouts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'GridLayout' }],
   password: {
     type: String,

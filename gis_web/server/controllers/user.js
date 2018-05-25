@@ -15,15 +15,29 @@ export async function userLogin(ctx, next) {
   const data = ctx.request.body
   var decrypted = private_key.decrypt(data.password, 'utf8')
   const user = {
-    name: data.username,
-    password: decrypted
+    name: data.username
   }
 
   try {
-    const userInfo = await userApi.useLogin(user)
-    ctx.session.user = userInfo
-    msg.data.token = ctx.cookies.get('sessionId')
-    msg.code = 20000
+    const flag = await userApi.userExis(data.username)
+    if (flag.length > 0) {
+      const userInfo = await userApi.useLogin(user)
+      if (userInfo.password === decrypted) {
+        ctx.session.user = userInfo
+        const sid = ctx.cookies.get('sessionId')
+        msg.data.token = sid
+        const sid_old = await redisStore.getUser2Session(userInfo._id)
+        if (sid_old) await redisStore.destroy(sid_old, ctx)
+        await redisStore.setUser2Session(userInfo._id, sid)
+        msg.code = 20000
+      } else {
+        msg.code = 50000
+        msg.message = '密码错误'
+      }
+    } else {
+      msg.code = 50000
+      msg.message = '用户名错误'
+    }
   } catch (error) {
     msg.message = error
     msg.code = 50008
@@ -75,5 +89,51 @@ export function getRSAKey(ctx, next) {
   ctx.body = {
     key: config.public_key,
     code: 20000
+  }
+}
+export async function userList(ctx, next) {
+  const msg = {
+    data: {
+      token: ''
+    },
+    message: '',
+    code: ''
+  }
+  try {
+    const userList = await userApi.userList()
+    msg.data = userList
+    msg.code = 20000
+  } catch (error) {
+    msg.error = error
+    msg.code = 50000
+  }
+  ctx.body = msg
+}
+export async function saveUser(ctx, next) {
+  const data = ctx.request.body
+  try {
+    await userApi.saveUser(data)
+    ctx.body = {
+      code: 20000
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 50000,
+      message: '用户名已被注册'
+    }
+  }
+}
+export async function updateUser(ctx, next) {
+  const data = ctx.request.body
+  try {
+    await userApi.updateUser(data)
+    ctx.body = {
+      code: 20000
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 50000,
+      message: '未知错误'
+    }
   }
 }

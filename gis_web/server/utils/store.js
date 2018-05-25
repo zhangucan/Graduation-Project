@@ -20,7 +20,12 @@ class RedisStore extends Store {
     }
     return sid
   }
-
+  async setUser2Session(userId, sid) {
+    await this.redis.hset('UESR2SESSION', userId, sid)
+  }
+  async getUser2Session(userId) {
+    return await this.redis.hget('UESR2SESSION', userId)
+  }
   async destroy(sid, ctx) {
     return await this.redis.del(`SESSION:${sid}`)
   }

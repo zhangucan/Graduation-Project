@@ -5,7 +5,7 @@ import bodyparser from 'koa-bodyparser'
 import logger from 'koa-logger'
 import { fetchGridLayout, fetchGridLayoutList, fetchGridItem, saveGridItem, saveGridLayout, createGridLayout } from '../controllers/bigscreen'
 import { saveMap, fetchMap, fetchMapList, saveVectorFeatures, fetchVectors } from '../controllers/map'
-import { getRSAKey, userLogin, userInfo, requestMiddle, userLogout } from '../controllers/user'
+import { getRSAKey, userLogin, userInfo, requestMiddle, userLogout, userList, saveUser, updateUser } from '../controllers/user'
 
 export const router = app => {
   const router = new Router()
@@ -23,6 +23,9 @@ export const router = app => {
   router.get('/vector', fetchVectors)
   router.post('/vectorfeatures', saveVectorFeatures)
   router.get('/user/rsakey', getRSAKey)
+  router.get('/user/list', userList)
+  router.post('/user', saveUser)
+  router.put('/user', updateUser)
   router.post('/user/login', userLogin)
   router.get('/user/info', userInfo)
   router.post('/user/logout', userLogout)
