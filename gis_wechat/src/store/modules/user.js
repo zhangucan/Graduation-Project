@@ -1,12 +1,13 @@
-import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login, logout, getInfo, getRSAkey } from '@/api/login'
+import { getToken, setToken, removeToken, encrypt } from '@/utils/auth'
 
 const user = {
   state: {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    role: '',
+    gridLayouts: []
   },
 
   mutations: {
@@ -19,17 +20,21 @@ const user = {
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    SET_ROLES: (state, role) => {
+      state.role = role
+    },
+    SET_GRID_LAYOUTS: (state, gridLayouts) => {
+      state.gridLayouts = gridLayouts
     }
   },
 
   actions: {
-    // 登录
-    Login({ commit }, userInfo) {
+    async Login({ commit }, userInfo) {
+      const rsa = await getRSAkey()
+      const password = encrypt(rsa.key, userInfo.password)
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
+        login(username, password).then(response => {
           const data = response.data
           setToken(data.token)
           commit('SET_TOKEN', data.token)
@@ -39,18 +44,15 @@ const user = {
         })
       })
     },
-
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
+        getInfo().then(response => {
           const data = response.data
+          console.log(response)
           console.log(data)
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
+          commit('SET_ROLES', data.role)
+          commit('SET_GRID_LAYOUTS', data.gridLayouts)
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           resolve(response)

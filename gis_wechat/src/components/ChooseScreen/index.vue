@@ -70,7 +70,8 @@ export default {
   mounted() {
     const _this = this
     this.init()
-    this.$socket.emit('bigscreentList')
+    console.log(this.$store.state.user.gridLayouts)
+    this.$socket.emit('bigscreentList', this.$store.state.user.gridLayouts)
     this.$socket.on('fetchGridLayoutList', result => {
       result.forEach((item, index) => {
         const obj = {}
