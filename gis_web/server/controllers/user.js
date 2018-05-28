@@ -1,6 +1,7 @@
 import NodeRSA from 'node-rsa'
 import * as userApi from '../api/user.js'
 import config from '../config/index'
+import log4js from 'koa-log4'
 import { redisStore } from '../utils/store'
 const private_key = new NodeRSA(config.private_key)
 private_key.setOptions({ encryptionScheme: 'pkcs1' })
@@ -44,6 +45,7 @@ export async function userLogin(ctx, next) {
   }
   ctx.body = msg
 }
+const logger = log4js.getLogger('option')
 export async function requestMiddle(ctx, next) {
   const re = /^\/user\/(login|logout|rsakey)$/gi
   if (re.test(ctx.url)) {
@@ -52,7 +54,13 @@ export async function requestMiddle(ctx, next) {
     if (ctx.cookies.get('sessionId')) {
       const sessionId = ctx.cookies.get('sessionId')
       const userInfo = await redisStore.get(sessionId, ctx)
+      const info = {
+        name: userInfo.user.name,
+        date: new Date(),
+        option: ctx.path
+      }
       if (userInfo) {
+        logger.info(JSON.stringify(info))
         redisStore.set(userInfo, { sid: sessionId }, ctx)
         await next()
       } else {

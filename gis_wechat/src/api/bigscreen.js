@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchLayout(query) {
   return request({
-    url: '/gridlayout',
+    url: '/gridlayout/all',
     method: 'get',
     params: query
   })

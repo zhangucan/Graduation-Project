@@ -4657,6 +4657,16 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+mapbox-gl-compare@^0.1.0:
+  version "0.1.0"
+  resolved "http://registry.npm.taobao.org/mapbox-gl-compare/download/mapbox-gl-compare-0.1.0.tgz#73e2ae52fd166def2a9a8e417214d6d5b925fc51"
+  dependencies:
+    mapbox-gl-sync-move "^0.1.0"
+
+mapbox-gl-sync-move@^0.1.0:
+  version "0.1.0"
+  resolved "http://registry.npm.taobao.org/mapbox-gl-sync-move/download/mapbox-gl-sync-move-0.1.0.tgz#1057624a0acc823f4919f6152e80291ff89ac35a"
+
 mapbox-gl@0.43.0:
   version "0.43.0"
   resolved "http://registry.npm.taobao.org/mapbox-gl/download/mapbox-gl-0.43.0.tgz#c53978cdce0e3fa393a60bd5afc657842ce5b098"

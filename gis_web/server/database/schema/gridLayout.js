@@ -4,6 +4,6 @@ const GridLayoutSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  girdItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'GridItem' }]
+  girdItems: [{ type: mongoose.Schema.Types.ObjectId }]
 })
 mongoose.model('GridLayout', GridLayoutSchema)

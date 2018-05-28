@@ -49,8 +49,6 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
           const data = response.data
-          console.log(response)
-          console.log(data)
           commit('SET_ROLES', data.role)
           commit('SET_GRID_LAYOUTS', data.gridLayouts)
           commit('SET_NAME', data.name)

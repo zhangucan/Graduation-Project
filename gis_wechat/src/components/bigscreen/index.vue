@@ -1,6 +1,9 @@
 <template>
   <div class="container" >
-    <div class="header"></div>
+    <div class="header">
+      <div class="wraper">{{currentLayout.title}}</div>
+      <div class="timer">{{dataNow}}</div>
+      </div>
     <div class="content" ref="screenContainer">
       <grid-layout
         :layout='layout'
@@ -30,6 +33,7 @@
 import VueGridLayout from 'vue-grid-layout'
 import ScreenMap from '../ScreenMap'
 import ScreenChart from '../ScreenChart'
+import * as Util from '../../utils/index'
 const GridLayout = VueGridLayout.GridLayout
 const GridItem = VueGridLayout.GridItem
 export default {
@@ -52,12 +56,29 @@ export default {
     },
     componentWigth(w) {
       return w / 12
+    },
+    returnNow() {
+      const _this = this
+      setInterval(() => {
+        _this.dataNow = Util.parseTime(new Date())
+      }, 1000)
     }
   },
   computed: {
     layout() {
       return [...this.$store.state.bigscreen.gridItems]
+    },
+    currentLayout() {
+      return this.$store.state.bigscreen.currentLayout
     }
+  },
+  data() {
+    return {
+      dataNow: Util.parseTime(new Date())
+    }
+  },
+  mounted() {
+    this.returnNow()
   },
   beforeCreate() {
   }
@@ -81,7 +102,39 @@ export default {
 ::-webkit-scrollbar {
   display:none
 }
-
+.timer {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: normal;
+    font-family: "Microsoft Yahei";
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wraper{
+    padding-top: 10px;
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    color: white;
+    font-weight: normal;
+    font-family: "Microsoft Yahei";
+    font-size: 36px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 .container{
   margin: 0;
   padding: 0;

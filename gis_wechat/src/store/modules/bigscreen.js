@@ -78,6 +78,7 @@ const chartList = [
 const bigscreen = {
   state: {
     currentView: 'ChooseScreen',
+    currentMapView: 'MapShow',
     gridItem: {},
     currentLayout: '',
     gridLayout: {},
@@ -91,6 +92,9 @@ const bigscreen = {
   mutations: {
     SET_SCREEN_VIEW: (state, obj) => {
       state.currentView = obj.view
+    },
+    SET_CURRENT_MAP_VIEW: (state, obj) => {
+      state.currentMapView = obj.view
     },
     FETCH_LAYOUT: (state, data) => {
       state.gridLayout = data.gridLayout
@@ -123,6 +127,9 @@ const bigscreen = {
     },
     EDIT_CHART: (state, data) => {
       state.chartType = data
+    },
+    CURRENT_LAYOUT: (state, data) => {
+      state.currentLayout = data
     }
   },
   actions: {
@@ -172,6 +179,11 @@ const bigscreen = {
         commit('SET_SCREEN_VIEW', obj)
       })
     },
+    SetCurrentMapView({ commit }, obj) {
+      return new Promise((resolve, reject) => {
+        commit('SET_CURRENT_MAP_VIEW', obj)
+      })
+    },
     FetchAllLayout({ commit, state }, obj) {
       return new Promise((resolve, reject) => {
         bigscreenApi.fetchLayoutList().then(response => {
@@ -183,8 +195,11 @@ const bigscreen = {
       })
     },
     FetchLayout({ commit, state }, obj) {
+      const id = obj.gridLayoutId
       return new Promise((resolve, reject) => {
-        bigscreenApi.fetchLayout(obj).then(response => {
+        bigscreenApi.fetchLayout({ _id: id }).then(response => {
+          obj.title = response.gridLayout.title
+          commit('CURRENT_LAYOUT', obj)
           commit('FETCH_LAYOUT', response)
           resolve()
         }).catch(error => {

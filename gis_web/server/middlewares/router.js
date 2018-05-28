@@ -2,19 +2,19 @@ import Router from 'koa-router'
 import convert from 'koa-convert'
 import json from 'koa-json'
 import bodyparser from 'koa-bodyparser'
-import logger from 'koa-logger'
-import { fetchGridLayout, fetchGridLayoutList, fetchGridItem, saveGridItem, saveGridLayout, createGridLayout } from '../controllers/bigscreen'
+import { fetchGridLayout, fetchGridLayoutDetail, fetchGridLayoutList, fetchGridItem, gridItemUpdate, gridLayoutUpdate, deleteGridLayout, createGridLayout } from '../controllers/bigscreen'
 import { saveMap, fetchMap, fetchMapList, saveVectorFeatures, fetchVectors } from '../controllers/map'
 import { getRSAKey, userLogin, userInfo, requestMiddle, userLogout, userList, saveUser, updateUser } from '../controllers/user'
-
 export const router = app => {
   const router = new Router()
   router.all('/*', requestMiddle)
   router.get('/griditem', fetchGridItem)
-  router.post('/griditem', saveGridItem)
+  router.post('/griditem', gridItemUpdate)
   router.get('/gridlayout', fetchGridLayout)
+  router.get('/gridlayout/all', fetchGridLayoutDetail)
+  router.delete('/gridlayout', deleteGridLayout)
   router.get('/createlayout', createGridLayout)
-  router.post('/gridlayout', saveGridLayout)
+  router.post('/gridlayout', gridLayoutUpdate)
   router.get('/gridlayoutlist', fetchGridLayoutList)
   router.post('/map/savemap', saveMap)
   router.post('/map/savevectorfeature', saveVectorFeatures)
@@ -29,9 +29,10 @@ export const router = app => {
   router.post('/user/login', userLogin)
   router.get('/user/info', userInfo)
   router.post('/user/logout', userLogout)
-  app.use(convert(bodyparser()))
+  app.use(convert(bodyparser({
+    jsonLimit: '10mb'
+  })))
   app.use(convert(json()))
-  app.use(convert(logger()))
   app.use(router.routes())
      .use(router.allowedMethods())
 }

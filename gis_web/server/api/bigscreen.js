@@ -14,13 +14,14 @@ export async function fetchGridLayoutList(query) {
     })
   })
 }
+export async function deleteGridLayout(query) {
+  return await GridLayout.findOneAndRemove(query).exec()
+}
+export async function deleteGridItem(query) {
+  return await GridItem.deleteMany(query).exec()
+}
 export async function fetchGridLayout(query) {
-  const layout = await GridLayout.findOne(query)
-  let gridItems = []
-  if (layout) {
-    gridItems = await fetchGridItems({ gridLayoutId: layout._id })
-  }
-  layout.gridItems = gridItems
+  const layout = await GridLayout.findOne(query).exec()
   return new Promise((resolve, reject) => {
     if (layout) {
       resolve(layout)
@@ -29,10 +30,11 @@ export async function fetchGridLayout(query) {
     }
   })
 }
+
 export async function saveGridLayout(data) {
   let gridLayout = null
   if (data._id) {
-    gridLayout = await fetchGridLayout({ _id: data._id })
+    gridLayout = await fetchGridLayout({ _id: data._id }).exec()
   }
   if (gridLayout) {
     gridLayout.title = data.title
@@ -72,6 +74,12 @@ export async function fetchGridItem(query) {
       }
     })
   })
+}
+export async function gridItemUpdate(id, update) {
+  await GridItem.update({ _id: id }, update).exec()
+}
+export async function gridLayoutUpdate(id, update) {
+  await GridLayout.update({ _id: id }, update).exec()
 }
 export async function saveGridItem(data) {
   let gridItem = null

@@ -7,7 +7,7 @@
           <el-card :body-style="{ padding: '0px',width: '20vw', height: '30vh'}" >
             <div slot="header" class="clearfix">
               <span>{{currentScreen.title}}</span>
-              <el-button style="float: right; padding: 3px 0" type="text" @click="showMoitor(currentScreen.gridLayoutId)">查看</el-button>
+              <el-button style="float: right; padding: 3px 0" type="text" @click="showMoitor(currentScreen)">查看</el-button>
             </div>
             <div class="desc">{{currentScreen.description}}</div>
           </el-card>
@@ -18,6 +18,7 @@
 </template>
 <script>
 import mapboxgl from 'mapbox-gl'
+import * as userApi from '../../api/login'
 import MapboxLanguage from '@mapbox/mapbox-gl-language'
 export default {
   data() {
@@ -57,35 +58,48 @@ export default {
         }, 3000) // After callback, show the location for 3 seconds.
       })
     },
-    async showMoitor(id) {
+    async showMoitor(item) {
       this.loading = true
       const obj = {
         view: 'BigScreen'
       }
-      await this.$store.dispatch('FetchLayout', { _id: id })
+      console.log(123)
+      await this.$store.dispatch('FetchLayout', item)
       this.loading = false
       await this.$store.dispatch('SetScreenView', obj)
     }
   },
   mounted() {
     const _this = this
-    this.init()
-    console.log(this.$store.state.user.gridLayouts)
-    this.$socket.emit('bigscreentList', this.$store.state.user.gridLayouts)
-    this.$socket.on('fetchGridLayoutList', result => {
-      result.forEach((item, index) => {
-        const obj = {}
-        obj.title = item.data.title
-        obj.id = index
-        obj.gridLayoutId = item.gridLayoutId
-        obj.description = item.data.desc
-        obj.camera = {}
-        obj.camera.center = [item.data.lon, item.data.lat]
-        obj.camera.bearing = Math.floor(Math.random() * 50)
-        obj.camera.pitch = Math.floor(Math.random() * 50)
-        obj.camera.zoom = 11.64
-        _this.bigscreenList.push(obj)
-      })
+    userApi.getInfo().then(result => {
+      if (result.data.gridLayouts.length === 0) {
+        this.$message({
+          message: '您没有权限，请向管理员领取权限！',
+          type: 'warning'
+        })
+      } else {
+        this.$socket.emit('bigscreentList', this.$store.state.user.gridLayouts)
+        this.$socket.on('fetchGridLayoutList', result => {
+          if (result.length !== 0) {
+            result.forEach((item, index) => {
+              const obj = {}
+              obj.title = item.data.title
+              obj.id = index
+              obj.gridLayoutId = item.gridLayoutId
+              obj.description = item.data.desc
+              obj.camera = {}
+              obj.camera.center = [item.data.lon, item.data.lat]
+              obj.camera.bearing = Math.floor(Math.random() * 50)
+              obj.camera.pitch = Math.floor(Math.random() * 50)
+              obj.camera.zoom = 11.64
+              _this.bigscreenList.push(obj)
+            })
+            _this.init()
+          }
+        })
+      }
+    }).catch(err => {
+      console.log(err)
     })
   }
 }
