@@ -1,147 +1,211 @@
+import api from '../api'
+import xss from 'xss'
+import R from 'ramda'
+import mongoose from 'mongoose'
+
 import NodeRSA from 'node-rsa'
-import * as userApi from '../api/user.js'
 import config from '../config/index'
-import log4js from 'koa-log4'
 import { redisStore } from '../utils/store'
+
 const private_key = new NodeRSA(config.private_key)
 private_key.setOptions({ encryptionScheme: 'pkcs1' })
-export async function userLogin(ctx, next) {
-  const msg = {
-    data: {
-      token: ''
-    },
-    message: '',
-    code: ''
-  }
-  const data = ctx.request.body
-  var decrypted = private_key.decrypt(data.password, 'utf8')
-  const user = {
-    name: data.username
-  }
 
+export async function getUsers() {
+  let info = {}
   try {
-    const flag = await userApi.userExis(data.username)
-    if (flag.length > 0) {
-      const userInfo = await userApi.useLogin(user)
-      if (userInfo.password === decrypted) {
-        ctx.session.user = userInfo
-        const sid = ctx.cookies.get('sessionId')
-        msg.data.token = sid
-        const sid_old = await redisStore.getUser2Session(userInfo._id)
-        if (sid_old) await redisStore.destroy(sid_old, ctx)
-        await redisStore.setUser2Session(userInfo._id, sid)
-        msg.code = 20000
-      } else {
-        msg.code = 50000
-        msg.message = '密码错误'
-      }
-    } else {
-      msg.code = 50000
-      msg.message = '用户名错误'
+    const data = await api.user.getUsers()
+    info = {
+      data: data,
+      code: 20000
     }
   } catch (error) {
-    msg.message = error
-    msg.code = 50008
-  }
-  ctx.body = msg
-}
-const logger = log4js.getLogger('option')
-export async function requestMiddle(ctx, next) {
-  const re = /^\/user\/(login|logout|rsakey)$/gi
-  if (re.test(ctx.url)) {
-    await next()
-  } else {
-    if (ctx.cookies.get('sessionId')) {
-      const sessionId = ctx.cookies.get('sessionId')
-      const userInfo = await redisStore.get(sessionId, ctx)
-      const info = {
-        name: userInfo.user.name,
-        date: new Date(),
-        option: ctx.path
-      }
-      if (userInfo) {
-        logger.info(JSON.stringify(info))
-        redisStore.set(userInfo, { sid: sessionId }, ctx)
-        await next()
-      } else {
-        ctx.body = {
-          code: 50008
-        }
-      }
-    } else {
-      ctx.body = {
-        code: 50000
-      }
+    info = {
+      code: 50000,
+      msg: error
     }
   }
+  return info
 }
-export async function userInfo(ctx, next) {
-  const useInfo = await redisStore.get(ctx.cookies.get('sessionId'), ctx)
-  ctx.body = {
-    code: 20000,
-    data: {
-      name: useInfo.user.name,
-      roles: useInfo.user.roles,
-      gridLayouts: useInfo.user.gridLayouts
-    }
-  }
-}
-export async function userLogout(ctx, next) {
-  const sessionId = ctx.cookies.get('sessionId')
-  await redisStore.destroy(sessionId, ctx)
-  ctx.body = {
-    code: 20000
-  }
-}
-export function getRSAKey(ctx, next) {
-  ctx.body = {
+export function getRSAKey() {
+  return {
     key: config.public_key,
     code: 20000
   }
 }
-export async function userList(ctx, next) {
-  const msg = {
-    data: {
-      token: ''
-    },
-    message: '',
-    code: ''
+export async function login(ctx) {
+  const body = ctx.request.body
+  let info = {}
+  const decrypted = private_key.decrypt(xss(body.password), 'utf8')
+  const flag = await api.user.isExist(body.username)
+  if (flag.length === 0) {
+    return (
+      info = {
+        code: 50000,
+        msg: '用户不存在'
+      }
+    )
   }
   try {
-    const userList = await userApi.userList()
-    msg.data = userList
-    msg.code = 20000
+    const userInfo = await api.user.getUser(flag[0]._id)
+    if (userInfo.password === decrypted) {
+      ctx.session.user = userInfo
+      const sid = ctx.cookies.get('sessionId')
+      info = {
+        data: {
+          token: sid,
+          _id: userInfo._id
+        },
+        code: 20000
+      }
+      const sid_old = await redisStore.getUser2Session(userInfo._id)
+      if (sid_old) await redisStore.destroy(sid_old, ctx)
+      await redisStore.setUser2Session(userInfo._id, sid)
+    } else {
+      return (
+        info = {
+          code: 50000,
+          msg: '密码错误'
+        }
+      )
+    }
   } catch (error) {
-    msg.error = error
-    msg.code = 50000
+    return (
+      info = {
+        code: 50000,
+        msg: error
+      }
+    )
   }
-  ctx.body = msg
+  return info
 }
-export async function saveUser(ctx, next) {
-  const data = ctx.request.body
+
+export async function getUserDetail(_id) {
+  let info = {}
+  if (!_id) {
+    return (
+      info = {
+        code: 50000,
+        msg: 'ID 不存在'
+      }
+    )
+  }
   try {
-    await userApi.saveUser(data)
-    ctx.body = {
+    const data = await api.user.getUserDetail(_id)
+    info = {
+      data: data,
       code: 20000
     }
   } catch (error) {
-    ctx.body = {
+    info = {
       code: 50000,
-      message: '用户名已被注册'
+      msg: error
     }
   }
+  return info
 }
-export async function updateUser(ctx, next) {
-  const data = ctx.request.body
+export async function getUser(_id) {
+  let info = {}
+  if (!_id) {
+    return (
+      info = {
+        code: 50000,
+        msg: 'ID 不存在'
+      }
+    )
+  }
   try {
-    await userApi.updateUser(data)
-    ctx.body = {
+    const data = await api.user.getUser(_id)
+    info = {
+      data: data,
       code: 20000
     }
   } catch (error) {
-    ctx.body = {
+    info = {
       code: 50000,
-      message: '未知错误'
+      msg: error
     }
+  }
+  return info
+}
+
+export async function updateUser(body) {
+  const { _id } = body
+  let info = {}
+  if (!_id) {
+    return (info = { code: 50000, msg: '_id不能为空' })
+  }
+  const user = {}
+  user._id = _id
+  user.title = xss(body.title)
+  user.role = xss(body.role)
+  user.password = xss(body.password)
+  user.name = xss(body.name)
+  R.map(
+    item => ({
+      _id: item._id
+    })
+  )(body.gridLayouts)
+  user.gridLayouts = body.gridLayouts
+  try {
+    info = {
+      code: 20000,
+      data: await api.user.updateUser(user)
+    }
+  } catch (error) {
+    info = {
+      code: 50000,
+      msg: error
+    }
+  }
+  return info
+}
+
+export async function delMap(_id) {
+  let info = {}
+  if (!_id) {
+    return (info = { code: 50000, msg: '_id不能为空' })
+  }
+  try {
+    await api.map.delMap(_id)
+    info = {
+      code: 20000
+    }
+  } catch (error) {
+    info = {
+      code: 50000,
+      msg: error
+    }
+  }
+  return info
+}
+
+export async function saveUser(body) {
+  let info = {}
+  const userId = new mongoose.Types.ObjectId()
+  body = {
+    _id: userId,
+    name: xss(body.name),
+    password: xss(body.password),
+    role: xss(body.role),
+    gridLayouts: body.gridLayouts
+  }
+  try {
+    await api.user.saveUser(body)
+    info = {
+      code: 20000
+    }
+  } catch (error) {
+    info = {
+      code: 50000,
+      msg: error
+    }
+  }
+  return info
+}
+export async function userLogout(ctx) {
+  const sessionId = ctx.cookies.get('sessionId')
+  await redisStore.destroy(sessionId, ctx)
+  ctx.body = {
+    code: 20000
   }
 }

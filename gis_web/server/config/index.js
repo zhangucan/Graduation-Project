@@ -1,5 +1,5 @@
 export default {
-  mongodb: 'mongodb://root:root@120.79.174.191:27017/gao?authSource=admin',
+  mongodb: 'mongodb://root:root@120.79.174.191:27017/gao2?authSource=admin',
   redis: {
     port: '6379',
     host: '120.79.174.191'

@@ -17,7 +17,25 @@ const MapSchema = new mongoose.Schema({
   desc: {
     type: String,
     required: true
+  },
+  meta: {
+    createdAt: {
+      type: Date,
+      default: Date.now()
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now()
+    }
   }
+})
+MapSchema.pre('save', function(next) {
+  if (this.isNew) {
+    this.meta.createdAt = this.meta.updatedAt = Date.now()
+  } else {
+    this.meta.updatedAt = Date.now()
+  }
+  next()
 })
 mongoose.model('Map', MapSchema)
 

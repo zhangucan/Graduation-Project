@@ -1,49 +1,57 @@
 import mongoose from 'mongoose'
 const User = mongoose.model('User')
-export function useLogin(obj) {
-  return new Promise((resolve, reject) => {
-    User.findOne(obj, (err, data) => {
-      if (err) reject(err)
-      if (data) {
-        resolve(data)
-      }
-    })
-  })
-}
-export async function userExis(query) {
-  return await User.where('name').equals(query)
-}
-export function userList() {
-  return new Promise((resolve, reject) => {
-    User.find({}, (err, data) => {
-      if (err) reject(err)
-      if (data) {
-        resolve(data)
-      }
-    })
-  })
-}
-export function saveUser(data) {
-  return new Promise((resolve, reject) => {
-    const user = new User(data)
-    user.save((err, data) => {
-      if (err) reject(err)
-      if (data) {
-        resolve(data)
-      }
-    })
-  })
-}
-export function updateUser(data) {
-  return new Promise((resolve, reject) => {
-    const user = {}
-    user.password = data.password
-    user.role = data.role
-    user.gridLayouts = data.gridLayouts
-    User.updateOne({ _id: data._id }, user, (err, obj) => {
-      if (err) return reject(err)
-      return resolve(obj._id)
-    })
-  })
+
+export async function saveUser(data) {
+  const user = await User.create(data)
+  return user
 }
 
+export async function getUsers() {
+  const users = await User.find({}).populate({
+    path: 'gridLayouts',
+    select: '_id title desc'
+  }).exec()
+  return users
+}
+
+export async function isExist(query) {
+  return await User.where('name').equals(query)
+}
+
+export async function getUser(id) {
+  const map = await User.findOne({ _id: id }).populate({
+    path: 'gridLayouts',
+    select: '_id title desc map',
+    populate: [{
+      path: 'map',
+      select: '_id lon lat'
+    }]
+  }).exec()
+  return map
+}
+
+export async function getUserDetail(id) {
+  const map = await User.findOne({ _id: id }).populate({
+    path: 'gridLayouts',
+    select: '_id title desc gridItems map',
+    populate: [{
+      path: 'gridItems',
+      select: '_id i x y w h component'
+    },
+    {
+      path: 'map',
+      select: '_id lon lat'
+    }]
+  }).exec()
+  return map
+}
+
+export async function updateUser(data) {
+  const user = await User.updateOne({ _id: data._id }, data).exec()
+  return user
+}
+
+export async function delUser(id) {
+  await User.deleteOne({ _id: id }).exec()
+  return true
+}

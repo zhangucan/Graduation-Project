@@ -20,18 +20,24 @@ const GridItemSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  title: {
-    type: String,
-    required: true
-  },
   component: mongoose.Schema.Types.Mixed,
   gridType: {
     type: String,
     required: true
   },
-  gridLayoutId: {
+  gridLayout: {
     type: mongoose.Schema.ObjectId,
     ref: 'GridLayout'
+  },
+  meta: {
+    createdAt: {
+      type: Date,
+      default: Date.now()
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now()
+    }
   }
 })
 mongoose.model('GridItem', GridItemSchema)
