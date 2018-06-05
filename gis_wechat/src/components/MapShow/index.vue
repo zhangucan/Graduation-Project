@@ -8,7 +8,7 @@
               <div style="margin-left:20px;">影像图层</div>
             </template>
             <el-radio-group style="padding: 10px;" v-model="currentRaster">
-              <el-radio  v-for="(item, index) in component.rasterList" :key="index" :label="item.id">{{item.title}}</el-radio>
+              <el-radio  v-for="(item, index) in component.rasterLayers" :key="index" :label="item._id">{{item.displayTime}}</el-radio>
             </el-radio-group>
           </el-collapse-item>
           <el-collapse-item>
@@ -16,8 +16,8 @@
               <div style="margin-left:20px;">矢量图层</div>
             </template>
             <el-checkbox-group v-model="checkedVector" style="padding: 5px 15px;">
-              <el-checkbox v-for="item in component.vectorList" :label="item.id" :key="item.id">
-                {{item.title}}
+              <el-checkbox v-for="item in component.vectorLayers" :label="item._id" :key="item._id">
+                {{item.type}}{{item.displayTime}}
               </el-checkbox>
             </el-checkbox-group>
           </el-collapse-item>
@@ -36,7 +36,6 @@
   </div>
 </template>
 <script>
-import CompareMap from '../CompareMap'
 import MapboxLanguage from '@mapbox/mapbox-gl-language'
 import mapboxgl from 'mapbox-gl'
 // import * as bigscreenApi from '../../api/bigscreen'
@@ -44,9 +43,6 @@ export default {
   props: {
     component: Object,
     height: Number
-  },
-  components: {
-    CompareMap
   },
   computed: {
     mapSize() {
@@ -112,13 +108,13 @@ export default {
       _this.map.on('load', function() {
         _this.map.flyTo(_this.mapInfo.camera)
         _this.map.addControl(new mapboxgl.NavigationControl(), 'top-left')
-        if (_this.component.rasterList && _this.component.rasterList.length > 0) {
-          _this.component.rasterList.forEach((item, index) => {
+        if (_this.component.rasterLayers && _this.component.rasterLayers.length > 0) {
+          _this.component.rasterLayers.forEach((item, index) => {
             _this.fetchRasterLayer(item)
           })
         }
-        if (_this.component.vectorList && _this.component.vectorList.length > 0) {
-          _this.component.vectorList.forEach((item, index) => {
+        if (_this.component.vectorLayers && _this.component.vectorLayers.length > 0) {
+          _this.component.vectorLayers.forEach((item, index) => {
             _this.fetchVectorLayer(item)
           })
         }
@@ -132,7 +128,7 @@ export default {
     },
     fetchRasterLayer(item) {
       this.map.addLayer({
-        'id': `raster${item.id}`,
+        'id': `raster${item._id}`,
         'source': {
           'type': 'raster',
           'tiles': [`${item.address}` + '/zxyTileImage.png?prjCoordSys={"epsgCode":3857}&z={z}&x={x}&y={y}'],
@@ -140,17 +136,17 @@ export default {
         },
         'type': 'raster'
       })
-      this.map.setLayoutProperty(`raster${item.id}`, 'visibility', 'none')
+      this.map.setLayoutProperty(`raster${item._id}`, 'visibility', 'none')
     },
     fetchVectorLayer(item) {
-      this.map.addSource(`vector${item.id}`, {
+      this.map.addSource(`vector${item._id}`, {
         type: 'geojson',
-        data: item.vectorFeatures
+        data: item.featurecollection
       })
       this.map.addLayer({
-        'id': `line${item.id}`,
+        'id': `line${item._id}`,
         'type': 'line',
-        'source': `vector${item.id}`,
+        'source': `vector${item._id}`,
         'paint': {
           'line-color': '#B42222',
           'line-width': 1
@@ -158,9 +154,9 @@ export default {
         'filter': ['==', '$type', 'LineString']
       })
       this.map.addLayer({
-        'id': `area${item.id}`,
+        'id': `area${item._id}`,
         'type': 'fill',
-        'source': `vector${item.id}`,
+        'source': `vector${item._id}`,
         'paint': {
           'fill-color': '#B42222',
           'fill-opacity': 0.4
@@ -168,18 +164,18 @@ export default {
         'filter': ['==', '$type', 'Polygon']
       })
       this.map.addLayer({
-        'id': `point${item.id}`,
+        'id': `point${item._id}`,
         'type': 'circle',
-        'source': `vector${item.id}`,
+        'source': `vector${item._id}`,
         'paint': {
           'circle-radius': 6,
           'circle-color': '#B42222'
         },
         'filter': ['==', '$type', 'Point']
       })
-      this.map.setLayoutProperty(`area${item.id}`, 'visibility', 'none')
-      this.map.setLayoutProperty(`point${item.id}`, 'visibility', 'none')
-      this.map.setLayoutProperty(`line${item.id}`, 'visibility', 'none')
+      this.map.setLayoutProperty(`area${item._id}`, 'visibility', 'none')
+      this.map.setLayoutProperty(`point${item._id}`, 'visibility', 'none')
+      this.map.setLayoutProperty(`line${item._id}`, 'visibility', 'none')
     }
   },
   mounted() {

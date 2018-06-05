@@ -7,12 +7,16 @@ const user = {
     name: '',
     avatar: '',
     role: '',
-    gridLayouts: []
+    gridLayouts: [],
+    _id: ''
   },
 
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+    },
+    SET_DETAIL: (state, data) => {
+      state.gridLayouts = data.gridLayouts
     },
     SET_NAME: (state, name) => {
       state.name = name
@@ -22,6 +26,9 @@ const user = {
     },
     SET_ROLES: (state, role) => {
       state.role = role
+    },
+    SET_USER_ID: (state, _id) => {
+      state._id = _id
     },
     SET_GRID_LAYOUTS: (state, gridLayouts) => {
       state.gridLayouts = gridLayouts
@@ -38,6 +45,7 @@ const user = {
           const data = response.data
           setToken(data.token)
           commit('SET_TOKEN', data.token)
+          commit('SET_USER_ID', data._id)
           resolve()
         }).catch(error => {
           reject(error)
@@ -47,7 +55,8 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
+        console.log(state._id)
+        getInfo(state._id).then(response => {
           const data = response.data
           commit('SET_ROLES', data.role)
           commit('SET_GRID_LAYOUTS', data.gridLayouts)

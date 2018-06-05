@@ -97,7 +97,7 @@ const bigscreen = {
       state.currentMapView = obj.view
     },
     FETCH_LAYOUT: (state, data) => {
-      state.gridLayout = data.gridLayout
+      state.gridLayout = data
       state.gridItems = data.gridItems
     },
     FETCH_ALL_LAYOUT: (state, data) => {
@@ -195,12 +195,10 @@ const bigscreen = {
       })
     },
     FetchLayout({ commit, state }, obj) {
-      const id = obj.gridLayoutId
       return new Promise((resolve, reject) => {
-        bigscreenApi.fetchLayout({ _id: id }).then(response => {
-          obj.title = response.gridLayout.title
+        bigscreenApi.fetchLayout(obj.gridLayoutId).then(response => {
           commit('CURRENT_LAYOUT', obj)
-          commit('FETCH_LAYOUT', response)
+          commit('FETCH_LAYOUT', response.data)
           resolve()
         }).catch(error => {
           reject(error)

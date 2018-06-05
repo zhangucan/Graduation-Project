@@ -3,17 +3,17 @@
     <el-row class="option">
       <el-select v-model="leftValue" size="mini" style="marign-right:20px;" clearable placeholder="请选择">
         <el-option
-          v-for="(item, index) in component.rasterList"
+          v-for="(item, index) in component.rasterLayers"
           :key="index"
-          :label="item.title"
+          :label="item.displayTime"
           :value="item.address">
         </el-option>
       </el-select>
       <el-select v-model="rightValue"  size="mini" style="marign-left:20px;" clearable placeholder="请选择">
         <el-option
-          v-for="(item, index) in component.rasterList"
+          v-for="(item, index) in component.rasterLayers"
           :key="index"
-          :label="item.title"
+          :label="item.displayTime"
           :value="item.address">
         </el-option>
       </el-select>

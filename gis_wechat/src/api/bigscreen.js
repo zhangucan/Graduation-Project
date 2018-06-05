@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-export function fetchLayout(query) {
+export function fetchLayout(id) {
   return request({
-    url: '/gridlayout/all',
-    method: 'get',
-    params: query
+    url: `/gridlayout/gridlayouts/${id}`,
+    method: 'get'
   })
 }
 

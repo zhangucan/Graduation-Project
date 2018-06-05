@@ -1,5 +1,13 @@
 <template>
-  <div class="content">
+<div>
+  <transition name="slide-fade">
+      <div id="dataLoading" v-show="loading">
+        <a target="_blank" href="javascript:;">
+          <img src="//cdn-service.datav.aliyun.com/datav-static/1.6.24_1/image/loading.gif">
+        </a>
+      </div>
+  </transition>
+  <div class="content" v-show="!loading">
     <div ref="basicMapbox" style="height:100%;"></div>
     <div class='map-overlay-container'>
       <el-row>
@@ -15,17 +23,20 @@
       </el-row>
     </div>
   </div>
+</div>
 </template>
 <script>
 import mapboxgl from 'mapbox-gl'
-import * as userApi from '../../api/login'
+// import * as userApi from '../../api/login'
 import MapboxLanguage from '@mapbox/mapbox-gl-language'
 export default {
   data() {
     return {
       map: null,
       bigscreenList: [],
-      currentScreen: {}
+      currentScreen: {},
+      gridLayouts: this.$store.state.user.gridLayouts,
+      loading: false
     }
   },
   methods: {
@@ -63,7 +74,6 @@ export default {
       const obj = {
         view: 'BigScreen'
       }
-      console.log(123)
       await this.$store.dispatch('FetchLayout', item)
       this.loading = false
       await this.$store.dispatch('SetScreenView', obj)
@@ -71,36 +81,64 @@ export default {
   },
   mounted() {
     const _this = this
-    userApi.getInfo().then(result => {
-      if (result.data.gridLayouts.length === 0) {
-        this.$message({
-          message: '您没有权限，请向管理员领取权限！',
-          type: 'warning'
+    if (this.gridLayouts.length === 0) {
+      this.$notify.error({
+        title: '失败',
+        message: '您没有权限，请向管理员领取权限!'
+      })
+    } else {
+      this.$notify({
+        title: '成功',
+        message: '获取大屏成功',
+        type: 'success'
+      })
+      if (this.gridLayouts.length !== 0) {
+        this.gridLayouts.forEach((item, index) => {
+          const obj = {}
+          obj.title = item.title
+          obj.id = index
+          obj.gridLayoutId = item._id
+          obj.description = item.desc
+          obj.camera = {}
+          obj.camera.center = [item.map.lon, item.map.lat]
+          obj.camera.bearing = Math.floor(Math.random() * 50)
+          obj.camera.pitch = Math.floor(Math.random() * 50)
+          obj.camera.zoom = 11.64
+          _this.bigscreenList.push(obj)
         })
-      } else {
-        this.$socket.emit('bigscreentList', this.$store.state.user.gridLayouts)
-        this.$socket.on('fetchGridLayoutList', result => {
-          if (result.length !== 0) {
-            result.forEach((item, index) => {
-              const obj = {}
-              obj.title = item.data.title
-              obj.id = index
-              obj.gridLayoutId = item.gridLayoutId
-              obj.description = item.data.desc
-              obj.camera = {}
-              obj.camera.center = [item.data.lon, item.data.lat]
-              obj.camera.bearing = Math.floor(Math.random() * 50)
-              obj.camera.pitch = Math.floor(Math.random() * 50)
-              obj.camera.zoom = 11.64
-              _this.bigscreenList.push(obj)
-            })
-            _this.init()
-          }
-        })
+        _this.init()
       }
-    }).catch(err => {
-      console.log(err)
-    })
+    }
+    // userApi.getInfo().then(result => {
+    //   if (result.data.gridLayouts.length === 0) {
+    //     this.$message({
+    //       message: '您没有权限，请向管理员领取权限！',
+    //       type: 'warning'
+    //     })
+    //   } else {
+    //     this.$socket.emit('bigscreentList', this.$store.state.user.gridLayouts)
+    //     this.$socket.on('fetchGridLayoutList', result => {
+    //       if (result.length !== 0) {
+    //         result.forEach((item, index) => {
+    //           const obj = {}
+    //           obj.title = item.data.title
+    //           obj.id = index
+    //           obj.gridLayoutId = item.gridLayoutId
+    //           obj.description = item.data.desc
+    //           obj.camera = {}
+    //           obj.camera.center = [item.data.lon, item.data.lat]
+    //           obj.camera.bearing = Math.floor(Math.random() * 50)
+    //           obj.camera.pitch = Math.floor(Math.random() * 50)
+    //           obj.camera.zoom = 11.64
+    //           _this.bigscreenList.push(obj)
+    //         })
+    //         _this.init()
+    //       }
+    //     })
+    //   }
+    // }).catch(err => {
+    //   console.log(err)
+    // })
   }
 }
 </script>
@@ -113,8 +151,8 @@ export default {
   display:none
 }
 .content{
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   position: inherit;
   overflow-y: scroll;
 }
@@ -141,5 +179,31 @@ export default {
 .desc{
   padding: 20px;
 }
-
+#dataLoading {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0f2a42;
+}
+#dataLoading img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -60px 0 0 -60px;
+  width: 120px;
+}
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
 </style>
