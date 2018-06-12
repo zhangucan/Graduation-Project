@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
+    <h1 class="login-title">国家湿地公园高分动态监测平台</h1>
     <el-form class="login-form login-content" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
-      <h1 class="title">国家湿地公园高分动态监测平台</h1>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
@@ -21,10 +21,10 @@
           登录
         </el-button>
       </el-form-item>
-      <div class="tips" style="text-align:center">
-        <span style="margin-right:20px;">版权所有@河南省高分中心平顶山分中心</span>
-      </div>
     </el-form>
+    <div class="login-tips" style="text-align:center">
+      <span style="margin-right:20px;">Copyright 2018 by 河南省高分中心平顶山分中心</span>
+    </div>
     <mapbox-map mapWidth="100%" mapHeight="100%"></mapbox-map>
   </div>
 </template>
@@ -137,6 +137,32 @@ $light_gray:#eee;
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
+.login-tips {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    padding: 35px 35px 15px 35px;
+    margin: 0px auto;
+    color: #e4e7ed;
+    text-align: center;
+    font-size: 28px;
+}
+.login-title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    padding: 35px 35px 15px 35px;
+    margin: 170px auto;
+    font-size: 78px;
+    font-weight: 400;
+    color: #e4e7ed;
+    text-align: center;
+    font-weight: bold;
+    font-family: STXingkai;
+}
 .login-container {
   position: fixed;
   height: 100%;
@@ -148,7 +174,7 @@ $light_gray:#eee;
     right: 0;
     width: 520px;
     padding: 35px 35px 15px 35px;
-    margin: 120px auto;
+    margin: 250px auto;
   }
   .tips {
     font-size: 14px;

@@ -41,16 +41,16 @@ export default {
   },
   methods: {
     init() {
-      mapboxgl.accessToken = 'pk.eyJ1Ijoiemhhbmd1Y2FuIiwiYSI6ImNqaGhiMDNsOTA3bTQzNnJ4MWlvcnB3Z2sifQ.6TRDunIBxcLu9vuU4yuNhQ'
+      mapboxgl.accessToken = 'pk.eyJ1Ijoiemhhbmd1Y2FuIiwiYSI6ImNqZ2t4d2hybTFoczEzM3BxZHNiZmx5ODEifQ.cRxbqbN3MrW454UdMfoc6w'
       this.beforeMap = new mapboxgl.Map({
         container: this.$refs.before,
-        style: 'mapbox://styles/mapbox/light-v9',
+        style: 'mapbox://styles/mapbox/satellite-v9',
         center: this.map.camera.center,
         zoom: 11
       })
       this.afterMap = new mapboxgl.Map({
         container: this.$refs.after,
-        style: 'mapbox://styles/mapbox/dark-v9',
+        style: 'mapbox://styles/mapbox/satellite-v9',
         center: this.map.camera.center,
         zoom: 11
       })

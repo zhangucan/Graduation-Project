@@ -78,6 +78,7 @@ export default {
       deep: true
     },
     checkedVector(val, oldVal) {
+      console.log(val)
       const _this = this
       oldVal.forEach(item => {
         _this.map.setLayoutProperty(`line${item}`, 'visibility', 'none')
@@ -94,10 +95,11 @@ export default {
   methods: {
     init() {
       const _this = this
-      mapboxgl.accessToken = 'pk.eyJ1Ijoiemhhbmd1Y2FuIiwiYSI6ImNqaGhiMDNsOTA3bTQzNnJ4MWlvcnB3Z2sifQ.6TRDunIBxcLu9vuU4yuNhQ'
+      mapboxgl.accessToken = 'pk.eyJ1Ijoiemhhbmd1Y2FuIiwiYSI6ImNqZ2t4d2hybTFoczEzM3BxZHNiZmx5ODEifQ.cRxbqbN3MrW454UdMfoc6w'
       this.map = new mapboxgl.Map({
         container: this.$refs.basicMapbox,
-        style: 'mapbox://styles/mapbox/dark-v9',
+        attributionControl: false,
+        style: 'mapbox://styles/mapbox/satellite-v9',
         center: [120.165, 20.74],
         zoom: 4
       })
@@ -108,16 +110,64 @@ export default {
       _this.map.on('load', function() {
         _this.map.flyTo(_this.mapInfo.camera)
         _this.map.addControl(new mapboxgl.NavigationControl(), 'top-left')
+        _this.map.addControl(new mapboxgl.FullscreenControl())
         if (_this.component.rasterLayers && _this.component.rasterLayers.length > 0) {
+          _this.notifyMessage(`当前影像数量${_this.component.rasterLayers.length}`)
           _this.component.rasterLayers.forEach((item, index) => {
             _this.fetchRasterLayer(item)
           })
         }
         if (_this.component.vectorLayers && _this.component.vectorLayers.length > 0) {
+          _this.notifyMessage(`当前矢量图层数量${_this.component.vectorLayers.length}`, 100)
           _this.component.vectorLayers.forEach((item, index) => {
             _this.fetchVectorLayer(item)
           })
         }
+        _this.map.addLayer({
+          'id': 'maine',
+          'type': 'fill',
+          'source': {
+            'type': 'geojson',
+            'data': {
+              'type': 'Feature',
+              'geometry': {
+                'type': 'Polygon',
+                'coordinates': [[[-67.13734351262877, 45.137451890638886],
+                  [-66.96466, 44.8097],
+                  [-68.03252, 44.3252],
+                  [-69.06, 43.98],
+                  [-70.11617, 43.68405],
+                  [-70.64573401557249, 43.090083319667144],
+                  [-70.75102474636725, 43.08003225358635],
+                  [-70.79761105007827, 43.21973948828747],
+                  [-70.98176001655037, 43.36789581966826],
+                  [-70.94416541205806, 43.46633942318431],
+                  [-71.08482, 45.3052400000002],
+                  [-70.6600225491012, 45.46022288673396],
+                  [-70.30495378282376, 45.914794623389355],
+                  [-70.00014034695016, 46.69317088478567],
+                  [-69.23708614772835, 47.44777598732787],
+                  [-68.90478084987546, 47.184794623394396],
+                  [-68.23430497910454, 47.35462921812177],
+                  [-67.79035274928509, 47.066248887716995],
+                  [-67.79141211614706, 45.702585354182816],
+                  [-67.13734351262877, 45.137451890638886]]]
+              }
+            }
+          },
+          'layout': {},
+          'paint': {
+            'fill-color': '#088',
+            'fill-opacity': 0.8
+          }
+        })
+      })
+    },
+    notifyMessage(msg, offset) {
+      this.$notify.info({
+        title: '提示',
+        message: msg,
+        offset: offset
       })
     },
     setView() {
@@ -173,9 +223,9 @@ export default {
         },
         'filter': ['==', '$type', 'Point']
       })
-      this.map.setLayoutProperty(`area${item._id}`, 'visibility', 'none')
-      this.map.setLayoutProperty(`point${item._id}`, 'visibility', 'none')
-      this.map.setLayoutProperty(`line${item._id}`, 'visibility', 'none')
+      // this.map.setLayoutProperty(`area${item._id}`, 'visibility', 'none')
+      // this.map.setLayoutProperty(`point${item._id}`, 'visibility', 'none')
+      // this.map.setLayoutProperty(`line${item._id}`, 'visibility', 'none')
     }
   },
   mounted() {
@@ -200,7 +250,7 @@ export default {
   top: 0;
   right: 0;
   margin: 20px;
-  padding: 10px;
+  padding: 25px;
   z-index: 1;
   width: 20%;
 }

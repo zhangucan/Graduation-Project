@@ -89,7 +89,7 @@ export default {
 .header {
   width: 100%;
   height: 10%;
-  background-image: url(../../../static/monitor/header.png);
+  background-image: url(https://datav.oss-cn-hangzhou.aliyuncs.com/uploads/images/1b8802fa1b358ce3c24eb167ee229910.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
@@ -139,7 +139,7 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-image: url(../../../static/monitor/background.png);
+  background-image: url(https://datav.oss-cn-hangzhou.aliyuncs.com/uploads/images/6c14af36fd6c17b197b9013c113b0079.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   position: absolute;

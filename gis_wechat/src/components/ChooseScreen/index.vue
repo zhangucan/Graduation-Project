@@ -27,7 +27,6 @@
 </template>
 <script>
 import mapboxgl from 'mapbox-gl'
-// import * as userApi from '../../api/login'
 import MapboxLanguage from '@mapbox/mapbox-gl-language'
 export default {
   data() {
@@ -41,10 +40,10 @@ export default {
   },
   methods: {
     init() {
-      mapboxgl.accessToken = 'pk.eyJ1Ijoiemhhbmd1Y2FuIiwiYSI6ImNqaGhiMDNsOTA3bTQzNnJ4MWlvcnB3Z2sifQ.6TRDunIBxcLu9vuU4yuNhQ'
+      mapboxgl.accessToken = 'pk.eyJ1Ijoiemhhbmd1Y2FuIiwiYSI6ImNqZ2t4d2hybTFoczEzM3BxZHNiZmx5ODEifQ.cRxbqbN3MrW454UdMfoc6w'
       this.map = new mapboxgl.Map({
         container: this.$refs.basicMapbox,
-        style: 'mapbox://styles/mapbox/dark-v9',
+        style: 'mapbox://styles/mapbox/satellite-v9',
         center: [120.165, 20.74],
         zoom: 4
       })
@@ -89,7 +88,7 @@ export default {
     } else {
       this.$notify({
         title: '成功',
-        message: '获取大屏成功',
+        message: `获取大屏成功,您共有${this.gridLayouts.length}个大屏权限`,
         type: 'success'
       })
       if (this.gridLayouts.length !== 0) {
@@ -109,36 +108,6 @@ export default {
         _this.init()
       }
     }
-    // userApi.getInfo().then(result => {
-    //   if (result.data.gridLayouts.length === 0) {
-    //     this.$message({
-    //       message: '您没有权限，请向管理员领取权限！',
-    //       type: 'warning'
-    //     })
-    //   } else {
-    //     this.$socket.emit('bigscreentList', this.$store.state.user.gridLayouts)
-    //     this.$socket.on('fetchGridLayoutList', result => {
-    //       if (result.length !== 0) {
-    //         result.forEach((item, index) => {
-    //           const obj = {}
-    //           obj.title = item.data.title
-    //           obj.id = index
-    //           obj.gridLayoutId = item.gridLayoutId
-    //           obj.description = item.data.desc
-    //           obj.camera = {}
-    //           obj.camera.center = [item.data.lon, item.data.lat]
-    //           obj.camera.bearing = Math.floor(Math.random() * 50)
-    //           obj.camera.pitch = Math.floor(Math.random() * 50)
-    //           obj.camera.zoom = 11.64
-    //           _this.bigscreenList.push(obj)
-    //         })
-    //         _this.init()
-    //       }
-    //     })
-    //   }
-    // }).catch(err => {
-    //   console.log(err)
-    // })
   }
 }
 </script>
